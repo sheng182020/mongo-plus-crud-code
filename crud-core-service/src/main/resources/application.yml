@@ -1,0 +1,31 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: dashboard-core-service
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+#  profiles:
+#    active: local
+
+mongo-plus:
+  data:
+    mongodb:
+      url: --
+      database: --
+  log: true
+
+logging:
+  file:
+    encoding: UTF-8
+    path: ./logs
+
+springdoc:
+  swagger-ui:
+    enabled: true

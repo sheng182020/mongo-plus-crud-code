@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$" dumb="true">
+      <sourceFolder url="file://$MODULE_DIR$/dashboard-core-service/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/dashboard-core-service/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/dashboard-core-service/src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+    </content>
+  </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="e61e4e73-676c-4973-b128-193d2aecc43d" />
+  </component>
+</module>
