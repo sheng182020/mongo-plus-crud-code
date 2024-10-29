@@ -43,6 +43,7 @@ public class RequestSearchPageGenerator {
 		sb.append("\n")
 
 				.append("import cn.hutool.json.JSONUtil;\n")
+				// .append(CommonCodeGenerator.getImportEnumFormatDeserializerHandler(code))
 				.append("import ").append(code.getJavaPackage()).append(".").append(code.getModelName()).append(".entity.").append(className).append("Entity;\n")
 				.append("import ").append(code.getJavaPackage()).append(".base.request.BasePageRequest;\n")
 
@@ -77,7 +78,7 @@ public class RequestSearchPageGenerator {
 			if (BaseEntityColumns.isMetaDataColumn(col)) {
 				continue;
 			}
-			if ("Date".equalsIgnoreCase(col.getJavaColumnName())){
+			if ("Date".equalsIgnoreCase(col.getJavaClassName())){
 				if (StrUtil.isNotBlank(col.getColumnComment())) {
 					sb.append("	/**\n")
 							.append("	 *  ").append(col.getColumnComment()).append(" Start").append("\n")
@@ -100,7 +101,9 @@ public class RequestSearchPageGenerator {
 							.append("	 *  ").append(col.getColumnComment()).append("\n")
 							.append("    */\n");
 				}
-				sb.append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer())
+				sb
+						// .append(CommonCodeGenerator.addEnumFormatDeserializerHandler(col))
+						.append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer())
 						.append(";\n\n");
 			}
 		}

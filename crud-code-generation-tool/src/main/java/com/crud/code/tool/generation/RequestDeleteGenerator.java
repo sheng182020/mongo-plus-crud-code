@@ -15,10 +15,6 @@ public class RequestDeleteGenerator {
 				.append("\n");
 
 		sb.append("\n")
-
-				.append("import cn.hutool.json.JSONUtil;\n")
-				.append("import ").append(code.getJavaPackage()).append(".").append(code.getModelName()).append(".entity.").append(className).append("Entity;\n")
-
 				.append("import lombok.Data;\n")
 				.append("import jakarta.validation.constraints.*;\n")
 				.append("import lombok.AllArgsConstructor;\n")

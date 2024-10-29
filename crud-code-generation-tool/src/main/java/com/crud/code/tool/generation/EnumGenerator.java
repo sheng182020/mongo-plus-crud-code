@@ -2,6 +2,7 @@ package com.crud.code.tool.generation;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.crud.code.tool.config.GenerateCode;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,9 @@ public class EnumGenerator {
             StringBuffer sb = new StringBuffer();
 
             sb.append("package ").append(code.getJavaPackage()).append(".").append(code.getModelName()).append(".enums;\n")
-                    .append("\n");
+                    .append("\n")
+                            .append("import ").append(code.getJavaPackage()).append(".base.enums.EnumBaseType;\n")
+            ;
 
             sb.append("\n")
                     .append("import lombok.Getter;\n")
@@ -29,7 +32,7 @@ public class EnumGenerator {
                     .append("\n *\n")
                     .append(" */\n")
                     .append("@Getter\n")
-                    .append("public enum ").append(col.getKey()).append(" {\n")
+                    .append("public enum ").append(col.getKey()).append(" implements EnumBaseType {\n")
                     .append("\n")
             ;
 

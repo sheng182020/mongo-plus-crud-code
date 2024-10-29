@@ -30,6 +30,7 @@ public class ResponseGenerator {
 
         sb.append("package ").append(code.getJavaPackage()).append(".").append(code.getModelName()).append(".response;\n")
                 .append("\n")
+                // .append(CommonCodeGenerator.getImportEnumFormatSerializerHandler(code))
                 .append("import ").append(code.getJavaPackage()).append(".").append(code.getModelName()).append(".entity.").append(className).append("Entity;\n");
 
         for (String importString : asList) { // 把需要声明引入的类找出来
@@ -77,7 +78,9 @@ public class ResponseGenerator {
                         .append("	 *  ").append(col.getColumnComment()).append("\n")
                         .append("    */\n");
             }
-            sb.append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer()).append(";\n\n");
+            sb
+                    // .append(CommonCodeGenerator.addEnumFormatSerializerHandler(col))
+                    .append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer()).append(";\n\n");
         }
 
         sb.append("    public static ").append(className).append("Response toResponse(").append(className).append("Entity entity) {\n")

@@ -6,6 +6,7 @@ import com.crud.code.tool.config.BaseEntityColumns;
 import com.crud.code.tool.config.ColumnInfo;
 import com.crud.code.tool.config.GenerateCode;
 import com.crud.code.tool.utils.Tools;
+
 import java.util.*;
 
 public class RequestSearchGenerator {
@@ -42,6 +43,7 @@ public class RequestSearchGenerator {
 		sb.append("\n")
 
 				.append("import cn.hutool.json.JSONUtil;\n")
+				// .append(CommonCodeGenerator.getImportEnumFormatDeserializerHandler(code))
 				.append("import ").append(code.getJavaPackage()).append(".").append(code.getModelName()).append(".entity.").append(className).append("Entity;\n")
 
 				.append("import lombok.Data;\n")
@@ -75,7 +77,7 @@ public class RequestSearchGenerator {
 			if (BaseEntityColumns.isMetaDataColumn(col)) {
 				continue;
 			}
-			if ("Date".equalsIgnoreCase(col.getJavaColumnName())){
+			if ("Date".equalsIgnoreCase(col.getJavaClassName())){
 				if (StrUtil.isNotBlank(col.getColumnComment())) {
 					sb.append("	/**\n")
 							.append("	 *  ").append(col.getColumnComment()).append(" Start").append("\n")
@@ -98,7 +100,9 @@ public class RequestSearchGenerator {
 							.append("	 *  ").append(col.getColumnComment()).append("\n")
 							.append("    */\n");
 				}
-				sb.append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer())
+				sb
+						// .append(CommonCodeGenerator.addEnumFormatDeserializerHandler(col))
+						.append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer())
 						.append(";\n\n");
 			}
 		}

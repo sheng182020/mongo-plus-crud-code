@@ -42,6 +42,7 @@ public class RequestCreateGenerator {
         sb.append("\n")
 
                 .append("import cn.hutool.json.JSONUtil;\n")
+                // .append(CommonCodeGenerator.getImportEnumFormatDeserializerHandler(code))
                 .append("import ").append(code.getJavaPackage()).append(".").append(code.getModelName()).append(".entity.").append(className).append("Entity;\n")
 
                 .append("import lombok.Data;\n")
@@ -83,14 +84,11 @@ public class RequestCreateGenerator {
                     sb.append("    @NotNull\n");
                 }
             }
-            if (col.getMax() != null) {
-                sb.append("    @Max(value = ").append(col.getMax()).append(")\n");
-            }
-            if (col.getMin() != null) {
-                sb.append("    @Min(value = ").append(col.getMin()).append(")\n");
-            }
-            sb.append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer())
-                    .append(col.getDefaultValue() != null ? " = " + col.getDefaultValue() : "")
+            sb.append(CommonCodeGenerator.getMaxValue(col.getMax(),col.getJavaClassName()))
+                    .append(CommonCodeGenerator.getMinValue(col.getMin(),col.getJavaClassName()))
+                    // .append(CommonCodeGenerator.addEnumFormatDeserializerHandler(col))
+                    .append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer())
+                    .append(CommonCodeGenerator.getDefaultValue(col))
                     .append(";\n\n");
         }
 

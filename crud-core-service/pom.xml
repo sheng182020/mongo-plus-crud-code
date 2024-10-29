@@ -9,7 +9,7 @@
 <!--        <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
     </parent>
     <groupId>com.gt</groupId>
-    <artifactId>crud-core-service</artifactId>
+    <artifactId>dashboard-core-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>crud-core-service</name>
     <description>crud-core-service</description>

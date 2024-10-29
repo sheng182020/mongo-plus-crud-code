@@ -41,7 +41,7 @@ public class RequestUpdateGenerator {
 		}
 
 		sb.append("\n")
-
+				// .append(CommonCodeGenerator.getImportEnumFormatDeserializerHandler(code))
 				.append("import cn.hutool.json.JSONUtil;\n")
 				.append("import ").append(code.getJavaPackage()).append(".").append(code.getModelName()).append(".entity.").append(className).append("Entity;\n")
 
@@ -78,20 +78,11 @@ public class RequestUpdateGenerator {
 						.append("	 *  ").append(col.getColumnComment()).append("\n")
 						.append("    */\n");
 			}
-			// if (Boolean.TRUE.equals(col.getRequired())) {
-			// 	if (String.class.getSimpleName().equalsIgnoreCase(col.getJavaClassName())) {
-			// 		sb.append("    @NotBlank\n");
-			// 	} else {
-			// 		sb.append("    @NotNull\n");
-			// 	}
-			// }
-			if (col.getMax() != null) {
-				sb.append("    @Max(value = ").append(col.getMax()).append(")\n");
-			}
-			if (col.getMin() != null) {
-				sb.append("    @Min(value = ").append(col.getMin()).append(")\n");
-			}
-			sb.append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer())
+
+			sb.append(CommonCodeGenerator.getMaxValue(col.getMax(),col.getJavaClassName()))
+					.append(CommonCodeGenerator.getMinValue(col.getMin(),col.getJavaClassName()))
+					// .append(CommonCodeGenerator.addEnumFormatDeserializerHandler(col))
+					.append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer())
 					.append(";\n\n");
 		}
 

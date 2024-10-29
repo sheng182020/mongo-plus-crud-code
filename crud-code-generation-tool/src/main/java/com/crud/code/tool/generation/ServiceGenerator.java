@@ -62,7 +62,7 @@ public class ServiceGenerator {
 
     private static void _calDelete(StringBuffer sb, String className) {
 
-        String op = "删除一条";
+        String op = "单条删除";
 
         sb.append("\n");
         sb.append("	/**\n")
@@ -75,7 +75,7 @@ public class ServiceGenerator {
 
     private static void _calGet(StringBuffer sb, String className) {
 
-        String op = "查询一条";
+        String op = "单条查询";
 
         sb.append("\n");
         sb.append("	/**\n")
@@ -88,7 +88,7 @@ public class ServiceGenerator {
 
     private static void _calSearchList(StringBuffer sb, String className) {
 
-        String op = "全部查询";
+        String op = "列表查询";
 
         sb.append("\n");
         sb.append("	/**\n")

@@ -1,5 +1,6 @@
 package com.crud.code.tool.generation;
 
+import com.crud.code.tool.config.BaseEntityColumns;
 import com.crud.code.tool.config.ColumnInfo;
 import com.crud.code.tool.config.GenerateCode;
 import com.crud.code.tool.utils.Tools;
@@ -79,7 +80,7 @@ public class ServiceImplGenerator {
 
     private static void _calDelete(StringBuffer sb, String className) {
 
-        String op = "删除一条";
+        String op = "单条删除";
 
         sb.append("\n");
         sb.append("	/**\n")
@@ -89,7 +90,6 @@ public class ServiceImplGenerator {
                 .append("	 */\n")
                 .append("	@Override\n")
                 .append("	public void delete(String id) {\n")
-                .append("\n")
                 .append("        this.removeById(id);\n")
                 .append("	}\n")
         ;
@@ -97,7 +97,7 @@ public class ServiceImplGenerator {
 
     private static void _calGet(StringBuffer sb, String className) {
 
-        String op = "查询一条";
+        String op = "单条查询";
 
         sb.append("\n");
         sb.append("	/**\n")
@@ -116,6 +116,10 @@ public class ServiceImplGenerator {
     private static void queryConditionCode(StringBuffer sb, String className, GenerateCode code) {
 
         for (ColumnInfo col : code.getColumns()) {
+            // 如果等于基础字段，重名也要continue,不再生成
+            if (BaseEntityColumns.isMetaDataColumn(col)) {
+                continue;
+            }
             if ("Object".equalsIgnoreCase(col.getJavaClassName())){
                 continue;
             }
@@ -125,9 +129,9 @@ public class ServiceImplGenerator {
                 ;
             }else if("Date".equalsIgnoreCase(col.getJavaClassName())){
                 sb.append("                .lte(request.").append(col.getter()).append("Start()!=null, ")
-                        .append(className).append("Entity::").append(col.getter()).append("Start, request.").append(col.getter()).append("Start())\n")
+                        .append(className).append("Entity::").append(col.getter()).append(", request.").append(col.getter()).append("Start())\n")
                 .append("                .gte(request.").append(col.getter()).append("End()!=null, ")
-                        .append(className).append("Entity::").append(col.getter()).append("End, request.").append(col.getter()).append("End())\n")
+                        .append(className).append("Entity::").append(col.getter()).append(", request.").append(col.getter()).append("End())\n")
                 ;
             }else{
                 sb.append("                .eq(request.").append(col.getter()).append("()!=null, ")
@@ -138,7 +142,7 @@ public class ServiceImplGenerator {
 
     private static void _calSearchList(StringBuffer sb, String className, GenerateCode code) {
 
-        String op = "全部查询";
+        String op = "列表查询";
 
         sb.append("\n");
         sb.append("	/**\n")

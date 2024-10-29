@@ -49,8 +49,11 @@ public class EntityGenerator {
                 .append("import com.anwen.mongo.annotation.collection.CollectionField;\n")
                 .append("import com.anwen.mongo.annotation.collection.CollectionName;\n")
                 .append("import ").append(code.getJavaPackage()).append(".base.entity.BaseEntity;\n")
-                .append(objectIdTypeHandleCode(code.getJavaPackage(),code.getOptionConfig().getIsHasObjectId()))
+                .append(objectIdTypeHandleCode(code.getJavaPackage(), code.getOptionConfig().getIsHasObjectId()))
+                // .append(enumTypeHandleCode(code.getJavaPackage(), code.getOptionConfig().getIsHasEnum()))
                 .append("import lombok.Data;\n")
+                .append("import lombok.AllArgsConstructor;\n")
+                .append("import lombok.NoArgsConstructor;\n")
 
                 .append("import java.io.Serializable;\n")
 
@@ -60,6 +63,8 @@ public class EntityGenerator {
                 .append(" *\n")
                 .append(" */\n")
                 .append("@Data\n")
+                .append("@AllArgsConstructor\n")
+                .append("@NoArgsConstructor\n")
                 .append("@CollectionName(\"").append(code.getTable().getTableName()).append("\")\n")
                 .append("public class ").append(className).append("Entity extends BaseEntity implements Serializable {\n")
                 .append("	\n")
@@ -88,10 +93,11 @@ public class EntityGenerator {
                         .append("	 *  ").append(col.getColumnComment()).append("\n")
                         .append("    */\n");
             }
-            if (col.isKey()) {
-                sb.append("    @CollectionField(typeHandler = ObjectIdTypeHandler.class)\n");
+            if (col.getColumnName().equalsIgnoreCase("project")) {
+                System.out.println("test");
             }
-            sb.append(addCollectionField(col.getDbFieldName())).append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer()).append(";\n\n");
+            addCollectionField(sb, col.getDbFieldName(), col.isKey());
+            sb.append("    private ").append(col.newJavaClassName()).append(" ").append(col.getJavaColumnNameLowwer()).append(";\n\n");
         }
         // addBaseCol(sb); //添加基础字段
         sb.append("}\n");
@@ -103,17 +109,61 @@ public class EntityGenerator {
     }
 
 
-    private static String objectIdTypeHandleCode(String javaClassPath,Boolean isObjectId) {
-        return Boolean.TRUE.equals(isObjectId) ? "import " + javaClassPath+".base.handler.ObjectIdTypeHandler;\n" : "";
+    private static String objectIdTypeHandleCode(String javaClassPath, Boolean isObjectId) {
+        return Boolean.TRUE.equals(isObjectId) ? "import " + javaClassPath + ".base.handler.ObjectIdTypeHandler;\n" : "";
     }
 
-    private static String addCollectionField(String dbFieldName) {
-        return StrUtil.isNotBlank(dbFieldName) ? "	@CollectionField(\"" + dbFieldName + "\")\n" : "";
+    private static String enumTypeHandleCode(String javaClassPath, Boolean hasEnum) {
+        return Boolean.TRUE.equals(hasEnum) ? "import " + javaClassPath + ".base.handler.EnumTypeHandler;\n" : "";
     }
 
-    private static void addBaseCol(StringBuffer sb){
+    private static void addCollectionField(StringBuffer sb, String dbFieldName, Boolean isKey) {
+
+        if (StrUtil.isBlank(dbFieldName) && !isKey) {
+            return;
+        }
+        if (StrUtil.isNotBlank(dbFieldName)) {
+            sb.append("    @CollectionField(value = \"").append(dbFieldName).append("\"");
+            if (isKey) {
+                sb.append(", typeHandler = ObjectIdTypeHandler.class");
+            }
+            sb.append(")\n");
+        } else {
+            sb.append("    @CollectionField(typeHandler = ObjectIdTypeHandler.class)\n");
+        }
+    }
+
+    private static void addCollectionField(StringBuffer sb, String dbFieldName, Boolean isKey, Boolean isEnum) {
+
+        // Validate that isEnum and isKey are mutually exclusive
+        if (isEnum != null && isKey != null && isEnum && isKey) {
+            throw new IllegalArgumentException("isEnum and isKey cannot both be true.");
+        }
+
+        if (StrUtil.isBlank(dbFieldName) && !isKey && !isEnum) {
+            return;
+        }
+
+        if (StrUtil.isNotBlank(dbFieldName)) {
+            sb.append("    @CollectionField(value = \"").append(dbFieldName).append("\"");
+            if (isEnum != null && isEnum) {
+                sb.append(", typeHandler = EnumTypeHandler.class");
+            } else if (isKey != null && isKey) {
+                sb.append(", typeHandler = ObjectIdTypeHandler.class");
+            }
+            sb.append(")\n");
+        } else {
+            if (isKey != null && isKey) {
+                sb.append("    @CollectionField(typeHandler = ObjectIdTypeHandler.class)\n");
+            } else if (isEnum != null && isEnum) {
+                sb.append("    @CollectionField(typeHandler = EnumTypeHandler.class)\n");
+            }
+        }
+    }
+
+    private static void addBaseCol(StringBuffer sb) {
         for (BaseEntityColumns value : BaseEntityColumns.values()) {
-            if (StrUtil.isNotBlank(value.getRemark())){
+            if (StrUtil.isNotBlank(value.getRemark())) {
                 sb.append("    ").append(value.getRemark()).append("\n");
             }
             sb.append("    private ").append(value.getType()).append(" ").append(value.getName()).append(";\n\n");

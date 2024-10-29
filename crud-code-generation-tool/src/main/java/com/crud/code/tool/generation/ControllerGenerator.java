@@ -83,7 +83,7 @@ public class ControllerGenerator {
 
 	private static void _calDelete(StringBuffer sb, String className,String javaNameLower) {
 		
-		String op = "删除一条";
+		String op = "单条删除";
 
 		sb.append("\n");
 		sb.append("	/**\n")
@@ -100,7 +100,7 @@ public class ControllerGenerator {
 
 	private static void _calGet(StringBuffer sb, String className,String javaNameLower) {
 		
-		String op = "查询一条";
+		String op = "单条查询";
 		
 		sb.append("\n");
 		sb.append("	/**\n")
@@ -125,7 +125,7 @@ public class ControllerGenerator {
 			.append("	 *\n")
 			.append(CommonCodeGenerator.getRemark())
 			.append("	 */\n")
-			.append("	@GetMapping(\"/page\")\n")
+			.append("	@PostMapping(\"/page\")\n")
 			.append("	private BaseResponse<PageResult<").append(className).append("ItemResponse>> search(@RequestBody @Validated ").append(className).append("SearchPageRequest request) {\n")
 			.append("		PageResult<").append(className).append("ItemResponse> response = this.")
 				.append(javaNameLower).append("Service.search(request);\n")
@@ -136,7 +136,7 @@ public class ControllerGenerator {
 
 	private static void _calSearchList(StringBuffer sb, String className,String javaNameLower) {
 
-		String op = "全部查询";
+		String op = "列表查询";
 
 		sb.append("\n");
 		sb.append("	/**\n")
@@ -144,7 +144,7 @@ public class ControllerGenerator {
 				.append("	 *\n")
 				.append(CommonCodeGenerator.getRemark())
 				.append("	 */\n")
-				.append("	@GetMapping(\"/list\")\n")
+				.append("	@PostMapping(\"/list\")\n")
 				.append("	private BaseResponse<List<").append(className).append("Response>> search(@RequestBody @Validated ").append(className).append("SearchRequest request) {\n")
 				.append("		List<").append(className).append("Response> response = this.")
 				.append(javaNameLower).append("Service.search(request);\n")

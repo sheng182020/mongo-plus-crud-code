@@ -5,10 +5,10 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.crud.code.tool.config.ColumnInfo;
-import com.crud.code.tool.config.OptionConfig;
-import com.crud.code.tool.generation.Generator;
 import com.crud.code.tool.config.GenerateCode;
+import com.crud.code.tool.config.OptionConfig;
 import com.crud.code.tool.config.TableInfo;
+import com.crud.code.tool.generation.Generator;
 import com.crud.code.tool.utils.Tools;
 import net.minidev.json.writer.JsonReader;
 
@@ -19,7 +19,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.*;
 
-public class JsonService {
+public class JsonV3Service {
 
     public static void cal(
             List<GenerateCode> list
@@ -27,10 +27,10 @@ public class JsonService {
             , String outputPath
     ) throws Exception {
 
+        // CommonCodeGenerator.initRemark();
         for (GenerateCode code : list) {
             String modelName = Tools.lowwerFirst(code.getObjectName());
 
-            // code.setOutputPath(outputPath);
             code.setModelName(modelName);
             code.setJavaPackage(javaPackage);
 
@@ -41,7 +41,6 @@ public class JsonService {
             Generator.cal(code);
 
             File targetDIR = new File(outputPath + "/" + modelName);
-            // File targetDIR = new File("E:/test/generatecodes" + "/" + javaPackage.replaceAll("[.]", "/"));
             targetDIR.mkdirs();
             new File(targetDIR, "/entity").mkdirs();
             new File(targetDIR, "/request").mkdirs();
@@ -135,13 +134,16 @@ public class JsonService {
         String description = jsonObject.getJSONObject("info").getStr("description", "");
 
         OptionConfig optionConfig = new OptionConfig();
-        if ("singleType".equals(kind)) {
-            optionConfig.setIsHasPage(Boolean.FALSE);
-            optionConfig.setIsHasList(Boolean.FALSE);
-        } else if ("collectionType".equals(kind)) {
-            optionConfig.setIsHasPage(Boolean.TRUE);
-            optionConfig.setIsHasList(Boolean.TRUE);
-        }
+        // 可以判断是否生成列表查询api, 有些只需要生成single api
+        // if ("singleType".equals(kind)) {
+        //     optionConfig.setIsHasPage(Boolean.FALSE);
+        //     optionConfig.setIsHasList(Boolean.FALSE);
+        // } else if ("collectionType".equals(kind)) {
+        //     optionConfig.setIsHasPage(Boolean.TRUE);
+        //     optionConfig.setIsHasList(Boolean.TRUE);
+        // }
+        optionConfig.setIsHasPage(Boolean.TRUE);
+        optionConfig.setIsHasList(Boolean.TRUE);
 
         TableInfo tableInfo = new TableInfo();
         tableInfo.setTableType(kind);
@@ -220,7 +222,7 @@ public class JsonService {
         } else if (
                 columnType.equalsIgnoreCase("string") ||
                         columnType.equalsIgnoreCase("richtext") ||
-                        // columnType.equalsIgnoreCase("date") ||
+                        columnType.equalsIgnoreCase("date") ||
                         columnType.equalsIgnoreCase("email")
         ) {
             javaClassName = String.class.getSimpleName();
@@ -250,7 +252,7 @@ public class JsonService {
             columnInfo.setMax(maximum);
             columnInfo.setMin(min);
             javaClassName = BigDecimal.class.getSimpleName();
-            columnInfo.setJavaPackage("java.math.BigDecimal");
+            javaPackage="java.math.BigDecimal";
         } else if (columnType.equalsIgnoreCase("bool")
                 || columnType.equalsIgnoreCase("boolean")
         ) {
@@ -279,10 +281,10 @@ public class JsonService {
         ) {
             javaClassName = Object.class.getSimpleName();
         } else if (columnType.equalsIgnoreCase("datetime")
-                || columnType.equalsIgnoreCase("date")
+                // || columnType.equalsIgnoreCase("date")
                 || columnType.equalsIgnoreCase("time")
         ) {
-            columnInfo.setJavaPackage("java.util.Date");
+            javaPackage="java.util.Date";
             javaClassName = Date.class.getSimpleName();
         }
         columnInfo.setDefaultValue(defaultValue);

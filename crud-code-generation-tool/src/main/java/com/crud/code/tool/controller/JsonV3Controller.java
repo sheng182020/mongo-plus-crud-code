@@ -1,9 +1,7 @@
 package com.crud.code.tool.controller;
 
-import cn.hutool.core.util.StrUtil;
 import com.crud.code.tool.config.GenerateCode;
-import com.crud.code.tool.service.JsonService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.crud.code.tool.service.JsonV3Service;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +21,7 @@ import java.util.zip.ZipOutputStream;
 
 @RestController
 @RequestMapping("/json")
-public class JsonController {
+public class JsonV3Controller {
 
     @PostMapping("/download")
     public ResponseEntity<byte[]> test(
@@ -36,7 +34,7 @@ public class JsonController {
         }
 
         // 读取body数据
-        List<GenerateCode> list = JsonService.readContent(content);
+        List<GenerateCode> list = JsonV3Service.readContent(content);
 
         // 获取临时目录
         String tempDir = System.getProperty("java.io.tmpdir");
@@ -47,7 +45,7 @@ public class JsonController {
             if (!outputDirectory.exists()) {
                 outputDirectory.mkdirs();
             }
-            JsonService.cal(
+            JsonV3Service.cal(
                     list,
                     javaPackage,
                     outputDir
@@ -128,12 +126,12 @@ public class JsonController {
 
 
     public static void main(String[] args) throws Exception {
-        String jsonFileName = "tkft-project-task.settings.json";
+        String jsonFileName = "teamplate.settings.json";
         // String output = "crud-code-generation-tool/src/main/resources/output";
-        String output = "crud-core-service/src/main/java/com/crud/code/svc";
+        String output = "dashboard-core-service/src/main/java/gt/dashboard/code/svc";
 
-        List<GenerateCode> list = JsonService.readFile(jsonFileName);
-        JsonService.cal(
+        List<GenerateCode> list = JsonV3Service.readFile(jsonFileName);
+        JsonV3Service.cal(
                 list,
                 "com.crud.code.svc",
                 output

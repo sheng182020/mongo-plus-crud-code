@@ -26,7 +26,6 @@ public class TableInfo {
 		return Tools.lowwerFirst(getJavaName());
 	}
 	public String getControllerURL() {
-		
 		return this.getJavaName().toLowerCase();
 	}
 }

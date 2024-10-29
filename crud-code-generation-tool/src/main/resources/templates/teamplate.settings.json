@@ -1,0 +1,626 @@
+[
+  {
+    "collectionName": "tkft_clients",
+    "info": {
+      "name": "tkft-client",
+      "description": ""
+    },
+    "options": {
+      "increments": true,
+      "timestamps": true,
+      "comment": ""
+    },
+    "attributes": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "unique": true
+      },
+      "key": {
+        "type": "string",
+        "index": true,
+        "private": true,
+        "description": "for migration only"
+      }
+    }
+  },
+  {
+    "collectionName": "tkft_resource_roles",
+    "kind": "collectionType",
+    "info": {
+      "name": "tkft-resource-role",
+      "description": ""
+    },
+    "options": {
+      "increments": true,
+      "timestamps": true,
+      "comment": ""
+    },
+    "attributes": {
+      "name": {
+        "type": "string",
+        "required": true
+      },
+      "description": {
+        "type": "string"
+      },
+      "abbreviation": {
+        "type": "string",
+        "default": null
+      },
+      "group": {
+        "via": "resource_roles",
+        "model": "tkft-resource-role-group"
+      },
+      "color": {
+        "type": "string",
+        "default": "blue"
+      },
+      "key": {
+        "type": "string",
+        "index": true,
+        "private": true,
+        "description": "for migration only"
+      },
+      "pertain": {
+        "type": "string"
+      }
+    }
+  },
+  {
+    "collectionName": "tkft_holiday_groups",
+    "kind": "collectionType",
+    "info": {
+      "name": "tkft-holiday-group"
+    },
+    "options": {
+      "increments": true,
+      "timestamps": true
+    },
+    "attributes": {
+      "name": {
+        "type": "string",
+        "private": false,
+        "required": true
+      },
+      "holidays": {
+        "collection": "tkft-holiday",
+        "via": "holiday_groups",
+        "dominant": true
+      },
+      "main": {
+        "type": "boolean",
+        "default": false
+      },
+      "archived": {
+        "type": "boolean",
+        "required": true,
+        "default": false
+      }
+    }
+  },
+  {
+    "collectionName": "tkft_resource_role_groups",
+    "kind": "collectionType",
+    "info": {
+      "name": "tkft-resource-role-group",
+      "description": ""
+    },
+    "options": {
+      "increments": true,
+      "timestamps": true,
+      "comment": ""
+    },
+    "attributes": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "unique": true
+      },
+      "resource_roles": {
+        "collection": "tkft-resource-role",
+        "via": "group"
+      }
+    }
+  },
+  {
+    "collectionName": "tkft_project_tasks",
+    "kind": "collectionType",
+    "info": {
+      "name": "tkft-project-task"
+    },
+    "options": {
+      "increments": true,
+      "timestamps": true,
+      "draftAndPublish": true
+    },
+    "attributes": {
+      "name": {
+        "type": "string"
+      },
+      "project": {
+        "model": "tkft-project"
+      },
+      "start_date": {
+        "type": "date"
+      },
+      "end_date": {
+        "type": "date"
+      },
+      "duration": {
+        "type": "float"
+      },
+      "assign_party": {
+        "type": "json"
+      },
+      "assignee": {
+        "type": "json"
+      },
+      "task_num": {
+        "type": "float"
+      },
+      "md": {
+        "type": "float"
+      },
+      "sub_tasks": {
+        "type": "json"
+      }
+    }
+  },
+  {
+    "collectionName": "tkft_user_assignments",
+    "info": {
+      "name": "tkft-user-assignment",
+      "description": ""
+    },
+    "options": {
+      "increments": true,
+      "timestamps": true,
+      "comment": ""
+    },
+    "attributes": {
+      "starts_at": {
+        "type": "date",
+        "required": true
+      },
+      "ends_at": {
+        "type": "date",
+        "required": true
+      },
+      "allocation_mode": {
+        "type": "enumeration",
+        "required": true,
+        "enum": [
+          "percent",
+          "hours_per_day",
+          "fixed"
+        ]
+      },
+      "placeholder": {
+        "model": "tkft-placeholder",
+        "require": true
+      },
+      "parent_id": {
+        "model": "tkft-project"
+      },
+      "assignable_id": {
+        "model": "tkft-project",
+        "required": true
+      },
+      "user": {
+        "model": "user",
+        "plugin": "users-permissions"
+      },
+      "assignable_type": {
+        "type": "enumeration",
+        "enum": [
+          "project",
+          "phase",
+          "leave"
+        ],
+        "required": true
+      },
+      "percent": {
+        "type": "float",
+        "default": 100.0,
+        "minimum": 0,
+        "maximum": 100.0
+      },
+      "hours_per_day": {
+        "type": "float",
+        "default": 0,
+        "minimum": 0,
+        "maximum": 24
+      },
+      "fixed_hours": {
+        "type": "float",
+        "default": 0,
+        "minimum": 0
+      },
+      "description": {
+        "type": "string",
+        "default": ""
+      },
+      "key": {
+        "type": "string",
+        "index": true,
+        "private": true,
+        "description": "for migration only"
+      },
+      "workdayBreakdown": {
+        "type": "json"
+      },
+      "workdayMonthBreakdown": {
+        "type": "json"
+      },
+      "workdayYearBreakdown": {
+        "type": "json"
+      },
+      "actual_task_id": {
+        "model": "tkft-project-task"
+      }
+    }
+  },
+  {
+    "collectionName": "tkft_time_entries",
+    "info": {
+      "name": "tkft-time-entry",
+      "description": ""
+    },
+    "options": {
+      "increments": true,
+      "timestamps": true,
+      "comment": ""
+    },
+    "attributes": {
+      "parent_id": {
+        "model": "tkft-project",
+        "required": true,
+        "description": "The project that that the field must same as assignable 's  parent_id"
+      },
+      "assignable_id": {
+        "model": "tkft-project",
+        "required": true
+      },
+      "date": {
+        "type": "date",
+        "required": true
+      },
+      "is_suggestion": {
+        "type": "boolean",
+        "required": true
+      },
+      "suggestion_assignment": {
+        "model": "tkft-user-assignment"
+      },
+      "scheduled_hours": {
+        "type": "decimal",
+        "default": 0.0
+      },
+      "hours": {
+        "type": "decimal",
+        "default": 0.0
+      },
+      "unconfirmed_hours": {
+        "type": "decimal",
+        "default": 0.0
+      },
+      "task_type": {
+        "model": "tkft-timefee-type"
+      },
+      "notes": {
+        "type": "string"
+      },
+      "user": {
+        "plugin": "users-permissions",
+        "model": "user"
+      },
+      "placeholder": {
+        "model": "tkft-placeholder",
+        "required": true,
+        "description": "The placeholder that the field must same as assigment 's  placeholder"
+      },
+      "key": {
+        "type": "string",
+        "index": true,
+        "private": true,
+        "description": "for migration only"
+      }
+    }
+  },
+  {
+    "collectionName": "tkft_placeholders",
+    "info": {
+      "name": "tkft-placeholder",
+      "description": ""
+    },
+    "options": {
+      "increments": true,
+      "timestamps": true,
+      "comment": ""
+    },
+    "attributes": {
+      "uid": {
+        "type": "string",
+        "required": true
+      },
+      "role": {
+        "model": "tkft-resource-role",
+        "required": true
+      },
+      "role_group": {
+        "model": "tkft-resource-role-group",
+        "required": true
+      },
+      "project": {
+        "model": "tkft-project",
+        "required": true
+      },
+      "user": {
+        "model": "user",
+        "plugin": "users-permissions"
+      },
+      "team": {
+        "model": "core-team",
+        "description": "Not essential when user is exist"
+      },
+      "location": {
+        "model": "tkft-holiday-group",
+        "description": "Not essential when user is exist"
+      },
+      "organization": {
+        "model": "core-organization",
+        "description": "Not essential when user is exist"
+      },
+      "actual_task_id": {
+        "model": "tkft-project-task"
+      },
+      "key": {
+        "type": "string",
+        "index": true,
+        "private": true,
+        "description": "for migration only"
+      }
+    }
+  },
+  {
+    "collectionName": "tkft_projects",
+    "kind": "collectionType",
+    "info": {
+      "name": "tkft-project"
+    },
+    "options": {
+      "increments": true,
+      "timestamps": true
+    },
+    "attributes": {
+      "archived": {
+        "type": "boolean",
+        "default": false
+      },
+      "achieved_at": {
+        "type": "datetime",
+        "default": null
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "phase_name": {
+        "type": "string",
+        "default": ""
+      },
+      "project_code": {
+        "type": "string"
+      },
+      "phase_code": {
+        "type": "string"
+      },
+      "settings": {
+        "type": "json",
+        "default": {}
+      },
+      "project_tags": {
+        "type": "json",
+        "default": []
+      },
+      "phase_tags": {
+        "type": "json",
+        "default": []
+      },
+      "timeentry_lockout": {
+        "type": "number",
+        "description": "-1\tNot locked\n0\tLocked\n7\tLocked for entries more than 7 calendar days ago. This can be any positive integer value",
+        "default": -1
+      },
+      "budget_setting": {
+        "type": "boolean",
+        "default": false
+      },
+      "budgets": {
+        "type": "json",
+        "default": []
+      },
+      "starts_at": {
+        "type": "date",
+        "required": true
+      },
+      "ends_at": {
+        "type": "date",
+        "required": true
+      },
+      "deleted_at": {
+        "type": "datetime"
+      },
+      "created_at": {
+        "type": "datetime"
+      },
+      "updated_at": {
+        "type": "datetime"
+      },
+      "thumbnail": {
+        "model": "file",
+        "via": "related",
+        "allowedTypes": [
+          "images"
+        ],
+        "plugin": "upload",
+        "autoPopulate": false
+      },
+      "client": {
+        "model": "tkft-client"
+      },
+      "project_owner": {
+        "plugin": "users-permissions",
+        "model": "user"
+      },
+      "project_type": {
+        "model": "tkft-project-type",
+        "default": null
+      },
+      "parent_id": {
+        "model": "tkft-project",
+        "default": null
+      },
+      "key": {
+        "type": "string",
+        "index": true,
+        "private": true,
+        "description": "for migration only"
+      },
+      "organization": {
+        "model": "core-organization"
+      },
+      "client_type": {
+        "type": "enumeration",
+        "enum": [
+          "internal",
+          "external"
+        ],
+        "default": "internal"
+      },
+      "calendar_holiday_group": {
+        "model": "tkft-holiday-group"
+      },
+      "type": {
+        "type": "enumeration",
+        "enum": [
+          "new",
+          "change",
+          "maintenance"
+        ],
+        "default": "new"
+      },
+      "nature_type": {
+        "type": "enumeration",
+        "enum": [
+          "agile",
+          "waterfall",
+          "others"
+        ],
+        "default": "others"
+      },
+      "nature_name": {
+        "type": "string"
+      },
+      "timesheet_report": {
+        "type": "boolean",
+        "default": false
+      },
+      "assign_party": {
+        "type": "json",
+        "default": [
+          "GT",
+          "Client"
+        ]
+      },
+      "md": {
+        "type": "float"
+      }
+    }
+  },
+  {
+    "collectionName": "tkft_logs",
+    "kind": "collectionType",
+    "info": {
+      "name": "tkft-log"
+    },
+    "options": {
+      "increments": true,
+      "timestamps": true
+    },
+    "attributes": {
+      "actor": {
+        "plugin": "users-permissions",
+        "model": "user",
+        "required": true
+      },
+      "user": {
+        "plugin": "users-permissions",
+        "model": "user"
+      },
+      "placeholder": {
+        "model": "tkft-placeholder"
+      },
+      "project": {
+        "model": "tkft-project"
+      },
+      "phase": {
+        "model": "tkft-project"
+      },
+      "type": {
+        "type": "enumeration",
+        "enum": [
+          "createAssignment",
+          "updateAssignment",
+          "deleteAssignment",
+          "createProject",
+          "updateProject",
+          "deleteProject",
+          "createPhase",
+          "updatePhase",
+          "deletePhase",
+          "setBudget",
+          "updateBudget",
+          "removeBudget"
+        ]
+      },
+      "changes": {
+        "type": "json"
+      }
+    }
+  },
+  {
+    "collectionName": "tkft_holidays",
+    "kind": "collectionType",
+    "info": {
+      "name": "tkft-holiday"
+    },
+    "options": {
+      "increments": true,
+      "timestamps": true
+    },
+    "attributes": {
+      "name": {
+        "type": "string",
+        "required": true
+      },
+      "date": {
+        "type": "date",
+        "required": true
+      },
+      "holiday_groups": {
+        "via": "holidays",
+        "collection": "tkft-holiday-group"
+      },
+      "key": {
+        "type": "string",
+        "index": true,
+        "private": true,
+        "description": "for migration only"
+      }
+    }
+  }
+]
